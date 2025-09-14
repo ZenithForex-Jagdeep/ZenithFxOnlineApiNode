@@ -26,6 +26,7 @@ app.get('/liverates/:key/:isd', async(req,res)=>{
             //console.log(response);
             //res.json(response.data);
             if (typeof response.data === "undefined") {
+                console.log("failed to provided rates 01");
                 res.status(500).json({Result:"failed",error:'failed to provided rates'});
             }else{
                 let response1 = {};
@@ -44,7 +45,7 @@ app.get('/liverates/:key/:isd', async(req,res)=>{
                         "CurrencyCode":req.params.isd,
                     }
                 }
-                
+                console.log(response1);
                 res.json(response1); 
             }
             
@@ -54,12 +55,14 @@ app.get('/liverates/:key/:isd', async(req,res)=>{
             res.status(500).json({Result:"failed",error:'failed to provided rates'});
         }
     }else{
+        console.log("404 - Not Found 02");
         res.status(404).json({error:'Not Found 404'});
     }
 });
 
 app.use((req, res) => {
-    res.status(404).send("404 - Not Found - ...-..");
+    console.log("404 - Not Found 01");
+    res.status(404).send("404 - Not Found");
   });
 
 app.listen(port,()=>{
