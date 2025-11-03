@@ -36,7 +36,9 @@ app.get('/liverates/:key/:isd', async(req,res)=>{
                         "message":response.data.message,
                         "CurrencyCode":response.data.detail[0].CurrencyCode,
                         "INRBuy":response.data.detail[0].INRBuy,
-                        "INRSell":response.data.detail[0].INRSell
+                        "INRSell":response.data.detail[0].INRSell,
+                        "USDBuy":response.data.detail[0].USDBuy,
+                        "USDSell":response.data.detail[0].USDSell
                     }
                 }else{
                     response1 = {
