@@ -100,7 +100,7 @@ app.get('/calculatecharges/:key', async (req, res) => {
     }
 });
 
-app.get('/panvalidation/:key', (req, res) => {
+app.get('/panvalidation/:key', async (req, res) => {
     // res.status(200).json({ msg: 'Everything OK' });
     if (req.params.key === 'f2PqY7RjVh6mKZ4N8cQd9LXwB0t5G3sMaJ1rUyHozlSnWbEkxIp') {
         try {
@@ -130,22 +130,39 @@ app.get('/panvalidation/:key', (req, res) => {
     }
 });
 
-app.get('/forexrate/:key/', (req, res) => {
+app.get('/forexrate/:key/',async (req, res) => {
     // res.status(200).json({ msg: 'Everything OK' });
     if (req.params.key === 'f2PqY7RjVh6mKZ4N8cQd9LXwB0t5G3sMaJ1rUyHozlSnWbEkxIp') {
         try {
             //validate request
             const reqObj = req.body;
             console.log(reqObj);
-            res.status(200).json({
-                Result: "success",
-                message: "ok",
-                CurrencyCode: reqObj.ISD,
-                INRBuy: "115.6714",
-                INRSell: "115.6872",
-                USDBuy: "1.30551",
-                USDSell: "1.30554"
-            });
+            const response = await axios.get('https://api.eforexindia.com/Currency/json/Oh7JFPOzosq6VM8IYguWw1fCfVWVPuUCEtCC0mQfLXwf0GuhJ6/' + reqObj.ISD.toUpperCase() + '/');
+            if (typeof response.data === "undefined") {
+                console.log("failed to provided rates 01");
+                res.status(500).json({ Result: "failed", error: 'failed to provided rates' });
+            } else {
+                let response1 = {};
+                if (response.data.message === 'ok') {
+                    response1 = {
+                        "Result": response.data.Result,
+                        "message": response.data.message,
+                        "CurrencyCode": response.data.detail[0].CurrencyCode,
+                        "INRBuy": response.data.detail[0].INRBuy,
+                        "INRSell": response.data.detail[0].INRSell,
+                        "USDBuy": response.data.detail[0].USDBuy,
+                        "USDSell": response.data.detail[0].USDSell
+                    }
+                } else {
+                    response1 = {
+                        "Result": response.data.Result,
+                        "message": response.data.message,
+                        "CurrencyCode": req.params.isd,
+                    }
+                }
+                console.log(response1);
+                res.json(response1);
+            }
         } catch (err) {
             console.log('Error while fetching live rates' + err.message);
             res.status(500).json({ Result: "failed", error: 'failed to provided rates' });
