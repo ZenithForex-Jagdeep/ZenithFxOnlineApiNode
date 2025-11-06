@@ -66,7 +66,7 @@ app.get('/health', (req, res) => {
     res.status(200).json({ msg: 'Everything OK' });
 });
 
-app.get('/calculatecharges/:key', async (req, res) => {
+app.post('/calculatecharges/:key', async (req, res) => {
     //validate authorisation
     if (req.params.key !== 'f2PqY7RjVh6mKZ4N8cQd9LXwB0t5G3sMaJ1rUyHozlSnWbEkxIp') {
         console.log("401 - ");
@@ -76,7 +76,7 @@ app.get('/calculatecharges/:key', async (req, res) => {
         //validate request mathode
         const reqObj = req.body;
         console.log(reqObj);
-        if (resObj.requesttype === 'Charges') {
+        if (reqObj.requesttype === 'Charges') {
             //basic logic
 
 
@@ -100,7 +100,7 @@ app.get('/calculatecharges/:key', async (req, res) => {
     }
 });
 
-app.get('/panvalidation/:key', async (req, res) => {
+app.post('/panvalidation/:key', async (req, res) => {
     // res.status(200).json({ msg: 'Everything OK' });
     if (req.params.key === 'f2PqY7RjVh6mKZ4N8cQd9LXwB0t5G3sMaJ1rUyHozlSnWbEkxIp') {
         try {
@@ -111,7 +111,7 @@ app.get('/panvalidation/:key', async (req, res) => {
                 response_Code: 1,
                 outputData: [
                     {
-                        pan: "AABCB6210B",
+                        pan: reqObj.pan,
                         pan_status: "E",
                         name: "Y",
                         fathername: "",
@@ -130,7 +130,7 @@ app.get('/panvalidation/:key', async (req, res) => {
     }
 });
 
-app.get('/forexrate/:key/',async (req, res) => {
+app.post('/forexrate/:key/',async (req, res) => {
     // res.status(200).json({ msg: 'Everything OK' });
     if (req.params.key === 'f2PqY7RjVh6mKZ4N8cQd9LXwB0t5G3sMaJ1rUyHozlSnWbEkxIp') {
         try {
