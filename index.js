@@ -66,14 +66,95 @@ app.get('/health', (req, res) => {
     res.status(200).json({ msg: 'Everything OK' });
 });
 
-app.get('/calculatecharges/:key', (req, res) => {
-    res.status(200).json({ msg: 'Everything OK' });
+app.get('/calculatecharges/:key', async (req, res) => {
+    //validate authorisation
+    if (req.params.key !== 'f2PqY7RjVh6mKZ4N8cQd9LXwB0t5G3sMaJ1rUyHozlSnWbEkxIp') {
+        console.log("401 - ");
+        return res.status(401).json({ error: 'Unauthorized access' });
+    }
+    try {
+        //validate request mathode
+        const reqObj = req.body;
+        console.log(reqObj);
+        if (resObj.requesttype === 'Charges') {
+            //basic logic
+
+
+            res.status(200).json({
+                MSGCODE: 1,
+                thisForex: 67780,
+                earlierForex: 0,
+                GST: 122,
+                TCS: 0,
+                bankCharges: 0,
+                GSTB1: 122,
+                GSTB2: 0
+            });
+        } else {
+            console.log("404 Method Not Found");
+            throw new Error({code : 404, err:"Method Not Found"});
+        }
+    } catch (err) {
+        console.log('Error while fetching live rates' + err);
+        res.status(500).json({ Result: "failed", error: 'failed to provided rates' });
+    }
 });
 
 app.get('/panvalidation/:key', (req, res) => {
-    res.status(200).json({ msg: 'Everything OK' });
+    // res.status(200).json({ msg: 'Everything OK' });
+    if (req.params.key === 'f2PqY7RjVh6mKZ4N8cQd9LXwB0t5G3sMaJ1rUyHozlSnWbEkxIp') {
+        try {
+            //validate request
+            const reqObj = req.body;
+            console.log(reqObj);
+            res.status(200).json({
+                response_Code: 1,
+                outputData: [
+                    {
+                        pan: "AABCB6210B",
+                        pan_status: "E",
+                        name: "Y",
+                        fathername: "",
+                        dob: "Y",
+                        seeding_status: "NA"
+                    }
+                ]
+            });
+        } catch (err) {
+            console.log('Error while fetching live rates' + err.message);
+            res.status(500).json({ Result: "failed", error: 'failed to provided rates' });
+        }
+    } else {
+        console.log("404 - Not Found 02");
+        res.status(404).json({ error: 'Not Found 404' });
+    }
 });
 
+app.get('/forexrate/:key/', (req, res) => {
+    // res.status(200).json({ msg: 'Everything OK' });
+    if (req.params.key === 'f2PqY7RjVh6mKZ4N8cQd9LXwB0t5G3sMaJ1rUyHozlSnWbEkxIp') {
+        try {
+            //validate request
+            const reqObj = req.body;
+            console.log(reqObj);
+            res.status(200).json({
+                Result: "success",
+                message: "ok",
+                CurrencyCode: reqObj.ISD,
+                INRBuy: "115.6714",
+                INRSell: "115.6872",
+                USDBuy: "1.30551",
+                USDSell: "1.30554"
+            });
+        } catch (err) {
+            console.log('Error while fetching live rates' + err.message);
+            res.status(500).json({ Result: "failed", error: 'failed to provided rates' });
+        }
+    } else {
+        console.log("404 - Not Found 02");
+        res.status(404).json({ error: 'Not Found 404' });
+    }
+});
 
 app.use((req, res) => {
     console.log("404 - Not Found 01");
