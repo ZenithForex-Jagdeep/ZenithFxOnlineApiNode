@@ -66,11 +66,11 @@ app.get('/health', (req, res) => {
     res.status(200).json({ msg: 'Everything OK' });
 });
 
-app.get('/calculatecharges', (req, res) => {
+app.get('/calculatecharges/:key', (req, res) => {
     res.status(200).json({ msg: 'Everything OK' });
 });
 
-app.get('/panvalidation', (req, res) => {
+app.get('/panvalidation/:key', (req, res) => {
     res.status(200).json({ msg: 'Everything OK' });
 });
 
