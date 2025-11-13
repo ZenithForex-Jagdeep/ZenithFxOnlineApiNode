@@ -107,8 +107,8 @@ app.post('/calculatecharges/:key', async (req, res) => {
         if (i > 1) {
             isok = false;
             errMsg = msg.join(' /n ');
-            respCode = 400;
-            console.log('Error while fetching live rates' + errMsg);
+            respCode = 200;
+            console.log(' ' + errMsg);
             // return res.status(400).json({ Result: "failed", error: msg });
         }
     }
@@ -186,8 +186,8 @@ app.post('/panvalidation/:key', async (req, res) => {
             if (i > 0) {
                 isok = false;
                 errMsg = msg.join(' /n ');
-                respCode = 400;
-                console.log('Error while fetching live rates' + msg);
+                // respCode = 400;
+                console.log('Request Received validations : ' + msg);
                 // return res.status(400).json({ Result: "failed", error: msg.join(' /n ') });
             }
         }
@@ -213,7 +213,7 @@ app.post('/panvalidation/:key', async (req, res) => {
                 respCode = 200;
                 responseObj = { ...resObj?.response };
             } else {
-                respCode = 400;
+                respCode = 200;
                 errMsg = resObj?.MSGTEXT;
             }
         }
@@ -229,8 +229,10 @@ app.post('/forexrate/:key/', async (req, res) => {
     let responseObj = {};
     let errMsg = '';
     let respCode = 200;
+    const reqObj = req.body;
+
     //validate authorisation
-    if (isok && req.params.key !== 'Oh7JFPOzosq6VM8IYguWw1fCfVWVPuUCEtCC0mQfLXwf0GuhJ6') {
+    if (isok && req.params.key !== 'f2PqY7RjVh6mKZ4N8cQd9LXwB0t5G3sMaJ1rUyHozlSnWbEkxIp') {
         console.log("401 - Unauthorized access");
         isok = false;
         respCode = 401;
@@ -239,11 +241,10 @@ app.post('/forexrate/:key/', async (req, res) => {
     }
     //validate request
     if (isok) {
-        const reqObj = req.body;
         console.log(reqObj);
         if (reqObj?.isd.length !== 3) {
             isok = false;
-            respCode = 400;
+            respCode = 200;
             errMsg = "ISD not is valid.";
             console.log('EInvalid ISD' + reqObj?.isd);
             // return res.status(400).json({ Result: "failed", error: "ISD not is valid." });
