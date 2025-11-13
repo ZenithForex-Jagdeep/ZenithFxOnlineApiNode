@@ -124,7 +124,8 @@ app.post('/calculatecharges/:key', async (req, res) => {
                 purpose: reqObj.purpose,
                 educationloanYN: reqObj.educationloan_yn,
                 branchCode: reqObj.branch,
-                remitterState: reqObj.remitter_state
+                remitterState: reqObj.remitter_state,
+                bankCharges:reqObj?.bankCharges || 0
             }
             const formData = new FormData();
             formData.append('request', JSON.stringify(obj));
